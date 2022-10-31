@@ -4,6 +4,7 @@ pragma solidity ^0.8.7;
 contract simpleAuction {
     //variable
     address payable public beneficiary;
+    uint PriceStart;
     uint public auctionEndTime;
     uint public highestBid;
     address public highestBidder;
@@ -15,11 +16,12 @@ contract simpleAuction {
     event highestBidIncrease(address bidder, uint amount);
     event auctionEnded(address winner, uint amount);
 
-    constructor (uint _biddingTime, address payable _beneficiary){
+    constructor (uint _biddingTime, address payable _beneficiary, uint _PriceStart){
         beneficiary = _beneficiary;
         auctionEndTime = block.timestamp + _biddingTime;
+        PriceStart = _PriceStart;
     }
-
+    
     function bid() public payable {
         if (block.timestamp > auctionEndTime ){
             revert("Phien dau gia ket thuc");
@@ -31,6 +33,10 @@ contract simpleAuction {
 
         if (highestBid != 0){
             pendingReturns[highestBidder] += highestBid;
+        }
+
+        if (msg.value < PriceStart ){
+            revert("Gia cua ban phai cao hon gia khoi diem");
         }
         
         highestBidder = msg.sender;
@@ -63,5 +69,9 @@ contract simpleAuction {
         emit auctionEnded(highestBidder, highestBid);
 
         beneficiary.transfer(highestBid);
+    }
+
+    function getBalance() public view returns(uint){
+        return address(this).balance;
     }
 }    
