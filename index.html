@@ -124,6 +124,11 @@
             <a content="Connect to Metamask" onclick="connectMetamask()">Metamask</a> <br>
             <input placeholder="Account area..." id="accountArea"></input>
         </div>
+
+        <div style="position: relative; float: left;">
+            <a content="Disconnect Metamask" onclick="disconnectMetamask()">Disconnect</a> <br>
+            
+        </div>
         
         <div style="position: relative; margin-top: 20px;">
             <a content="Connect to contract" onclick="connectContract()" >Contract</a> <br>
@@ -168,6 +173,16 @@
             }
             return false;
         }
+        let 
+        const accounts = await ethereum.request({method: 'eth_accounts'});
+        if (accounts && accounts.length > 0) {
+            console.log("user connected");
+        } else {
+            console.log("user not connected");
+        }
+
+
+
 
         //2-connect to smart contract
         const connectContract = async () => {
